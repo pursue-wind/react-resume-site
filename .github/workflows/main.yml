@@ -12,20 +12,24 @@ jobs:
     name: deploy to staging
     runs-on: ubuntu-latest
     steps:
-       # 拉取代码
-       - name: Checkout
-         uses: actions/checkout@v2
-         with:
-           persist-credentials: false
-       # 生成静态文件
-       - name: Build
-         run: |
-           yarn install && yarn build
-
-       # 部署到 GitHub Pages
-       - name: Deploy
-         uses: JamesIves/github-pages-deploy-action@v4.3.3
-         with:
-           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # 也就是我们刚才生成的 secret
-           BRANCH: pages
-           FOLDER: dist
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.1
+        with:
+          node-version: '14.x'
+      # 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      # 生成静态文件
+      - name: Build
+        run: |
+          yarn install && yarn build
+      
+      # 部署到 GitHub Pages
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: pages
+          FOLDER: dist
